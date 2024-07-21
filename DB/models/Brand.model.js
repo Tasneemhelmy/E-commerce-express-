@@ -28,6 +28,11 @@ const brandSchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
+brandSchema.post('init',(doc)=>{
+    if(doc.image)
+        doc.image='http://localhost:3000/uploads/brand/'+doc.image
+})
+
 
 const Brand=mongoose.model("Brand",brandSchema);
 

@@ -33,6 +33,10 @@ const subcategorySchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
+subcategorySchema.post('init',(doc)=>{
+    if(doc.image)
+        doc.image='http://localhost:3000/uploads/subcategory/'+doc.image
+})
 
 const Subcategory=mongoose.model("Subcategory",subcategorySchema);
 

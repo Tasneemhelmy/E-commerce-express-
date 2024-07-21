@@ -4,7 +4,7 @@ import fs from 'fs'
 import AppError from "../utils/Error.js";
 
 export const customVaildation={
-    image:["image/png","image/jpeg"]
+    image:["image/png","image/jpeg","image/jpg"]
 }
 
 export const uploads=(customVaildation,folderName)=>{
