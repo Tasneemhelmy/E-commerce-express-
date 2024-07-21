@@ -8,7 +8,8 @@ import AppError from "../../../utils/Error.js";
 
 
 export const getSUbCategories=asyncHandler(async(req,res,next)=>{
-    const Subcategories=await Subcategory.find();
+    console.log(req.params)
+    const Subcategories=await Subcategory.find({category:req.params.id}).populate('category');
     if(!Subcategories.length)
         return next(new AppError("Not Found Subcategories",404))
     res.status(200).json({message:"Subcategories",Subcategories})
@@ -27,7 +28,7 @@ export const addSubCatogery=asyncHandler(async(req,res,next)=>{
 
 
 export const getSubcatogery=asyncHandler(async(req,res,next)=>{
-    const Subcatogery=await Subcategory.findById(req.params.id);
+    const Subcatogery=await Subcategory.findById(req.params.id).populate('category');
     if(!Subcatogery)
         return next(new AppError("Not Found Subcatogery",404))
     res.status(200).json({message:"Subcatogery",Subcatogery})
@@ -49,3 +50,93 @@ export const deleteSubcatogery=asyncHandler(async(req,res,next)=>{
     (!Subcatogery)? next(new AppError("Not Found Subcatogery",404))
     :res.status(200).json({message:"deleted",Subcatogery})
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

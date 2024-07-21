@@ -1,11 +1,14 @@
 import { Router } from "express";
 import * as categoryController from './controller/Category.controller.js'
+import { customVaildation, uploads } from "../../middleware/fileUpload.js";
+import SubCategoryRouter from '../SubCategory/subCategory.route.js'
 
 
 const router=Router()
 router.get('/',categoryController.getCategories)
-    .post('/',categoryController.addCatogery)
+    .post('/',uploads(customVaildation.image,'category').single('image'),categoryController.addCatogery)
     .get('/:id',categoryController.getCategory)
-    .put('/:id',categoryController.updateCategory)
+    .put('/:id',uploads(customVaildation.image,'category').single('image'),categoryController.updateCategory)
     .delete('/:id',categoryController.deleteCategory)
+    .use('/:id/SubCategory',SubCategoryRouter)
 export default router

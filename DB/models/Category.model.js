@@ -29,7 +29,10 @@ const categorySchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
-
+categorySchema.post('init',(doc)=>{
+    if(doc.image)
+        doc.image='http://localhost:3000/uploads/category/'+doc.image
+})
 const Category=mongoose.model("Category",categorySchema);
 
 export default Category
