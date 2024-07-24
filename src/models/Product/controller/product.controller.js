@@ -3,28 +3,34 @@ import Category from "../../../../DB/models/Category.model.js";
 import Product from "../../../../DB/models/Product.model.js";
 import asyncHandler from "../../../middleware/asyncHandlers.js";
 import AppError from "../../../utils/Error.js";
+import ApiFeatures from "../../../utils/apiFeatures.js";
 
 
 
 
 export const getProducts=asyncHandler(async(req,res,next)=>{
-    const products=await Product.find().populate([
-        {
-            path:'category'
-        }, {
-            path:'subcategory'
-        }, {
-            path:'brand'
-        }
-    ]);
+    // const products=await Product.find().populate([
+    //     {
+    //         path:'category'
+    //     }, {
+    //         path:'subcategory'
+    //     }, {
+    //         path:'brand'
+    //     }
+    // ]);
+    
+let ApiFeature= new ApiFeatures(Product.find(),req.query)
+ApiFeature=ApiFeature.pagination().sort().fields().search('title','description')
+const products=await ApiFeature.mongooseQuery
     if(!products.length)
         return next(new AppError("Not Found products",404))
     res.status(200).json({message:"products",products})
 })
 
 export const addProduct=asyncHandler(async(req,res,next)=>{
-    req.body.mainImage=req.files.mainImage[0].filename
-    req.body.coverImage=req.files.coverImage.map(element=>element.filename)
+    if(req.files?.mainImage?.length)
+        req.body.mainImage=req.files?.mainImage[0].filename
+    req.body.coverImage=req.files?.coverImage?.map(element=>element.filename)
     const {title}=req.body
     req.body.slug=slugify(title)
     const product=await Product.create(req.body);

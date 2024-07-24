@@ -16,7 +16,7 @@ export const getSUbCategories=asyncHandler(async(req,res,next)=>{
 
 export const addSubCatogery=asyncHandler(async(req,res,next)=>{
     const {name}=req.body
-    req.body.image=req.file.filename
+    req.body.image=req.file?.filename
     req.body.slug=slugify(name)
     const findCatogery= await Category.findById(req.params.id)
     if(!findCatogery)

@@ -1,0 +1,18 @@
+import joi from "joi";
+
+
+export const addSubCategorySchema=joi.object({
+name:joi.string().required({message:"name is required"}).trim().min(2).max(26),
+id:joi.string().required().length(24).hex(),
+file:joi.object({
+    fieldname:joi.string().required(),
+    originalname:joi.string().required(),
+    mimetype:joi.string().required(),
+    destination:joi.string().required(),
+    filename:joi.string().required(),
+    encoding:joi.string().required(),
+    path:joi.string().required(),
+    size:joi.number().positive().required()
+})
+
+}).required()

@@ -77,11 +77,11 @@ const ProductSchema=new mongoose.Schema({
     versionKey:false
 })
 ProductSchema.post('init',(doc)=>{
-    if(doc.mainImage)
-        doc.mainImage='http://localhost:3000/uploads/product/'+doc.mainImage
+    if(doc?.mainImage)
+        doc.mainImage='http://localhost:3000/uploads/product/'+doc?.mainImage
 
-    if(doc.coverImage.length){
-        doc.coverImage=doc.coverImage.map((element)=>`http://localhost:3000/uploads/product/${element}`)
+    if(doc?.coverImage?.length){
+        doc.coverImage=doc?.coverImage.map((element)=>`http://localhost:3000/uploads/product/${element}`)
     }
 })
 

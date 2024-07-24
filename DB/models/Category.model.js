@@ -30,8 +30,8 @@ const categorySchema=new mongoose.Schema({
     versionKey:false
 })
 categorySchema.post('init',(doc)=>{
-    if(doc.image)
-        doc.image='http://localhost:3000/uploads/category/'+doc.image
+    if(doc?.image)
+        doc.image='http://localhost:3000/uploads/category/'+doc?.image
 })
 const Category=mongoose.model("Category",categorySchema);
 
