@@ -28,7 +28,6 @@ class ApiFeatures{
 
         fields(){
             if(this.data.fields){
-                console.log('hh')
                 this.mongooseQuery.select(this.data.fields.replaceAll(',',' '))
                 return this
             }

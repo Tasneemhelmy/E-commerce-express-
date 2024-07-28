@@ -51,7 +51,7 @@ export const deleteCategory=asyncHandler(async(req,res,next)=>{
     const category=await Category.findByIdAndDelete(req.params.id);
     
     if(!category) return next(new AppError("Not Found category",404))
-        if(req?.file)
+        if(category.image)
             deleteImage('category',category.image)
     return res.status(200).json({message:"deleted",category})
 })

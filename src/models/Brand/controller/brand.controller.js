@@ -53,7 +53,7 @@ export const deleteBrand=asyncHandler(async(req,res,next)=>{
     
     if(!brand) 
         return next(new AppError("Not Found brand",404))
-    if(req?.file)
+    if(brand.image)
         deleteImage('brand',brand.image)
     return res.status(200).json({message:"deleted",brand})
 })

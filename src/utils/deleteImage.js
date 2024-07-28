@@ -3,7 +3,7 @@ import path from "path";
 
 const deleteImage=(modelNama,image)=>{
     let imageName
-    if(image.startsWith('http')){
+    if(image?.startsWith('http')){
         imageName=image.split('/')[5]
     }else{
         imageName=image
