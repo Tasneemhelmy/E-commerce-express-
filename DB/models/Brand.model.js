@@ -28,10 +28,23 @@ const brandSchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
-brandSchema.post('init',(doc)=>{
-    if(doc.image)
-        doc.image='http://localhost:3000/uploads/brand/'+doc.image
-})
+brandSchema.post('find', function(docs) {
+    if (Array.isArray(docs)) {
+        docs.forEach(doc => {
+            if (doc.image) {
+                doc.image = 'http://localhost:3000/uploads/brand/' + doc.image;
+            }
+
+            
+        });
+    } else {
+        if (docs.image) {
+            docs.image = 'http://localhost:3000/uploads/brand/' + docs.image;
+        }
+
+        
+    }
+});
 
 
 const Brand=mongoose.model("Brand",brandSchema);

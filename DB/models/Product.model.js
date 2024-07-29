@@ -76,15 +76,28 @@ const ProductSchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
-ProductSchema.post('init',(doc)=>{
-    if(doc?.mainImage)
-        doc.mainImage='http://localhost:3000/uploads/product/'+doc?.mainImage
+ProductSchema.post('find', function(docs) {
+    if (Array.isArray(docs)) {
+        docs.forEach(doc => {
+            if (doc.mainImage) {
+                doc.mainImage = 'http://localhost:3000/uploads/product/' + doc.mainImage;
+            }
 
-    if(doc?.coverImage?.length){
-        doc.coverImage=doc?.coverImage.map((element)=>`http://localhost:3000/uploads/product/${element}`)
+            if (doc.coverImage && doc.coverImage.length) {
+                doc.coverImage = doc.coverImage.map(element => `http://localhost:3000/uploads/product/${element}`);
+            }
+        });
+    } else {
+        if (docs.mainImage) {
+            docs.mainImage = 'http://localhost:3000/uploads/product/' + docs.mainImage;
+        }
+
+        if (docs.coverImage && docs.coverImage.length) {
+            docs.coverImage = docs.coverImage.map(element => `http://localhost:3000/uploads/product/${element}`);
+        }
     }
-})
+});
 
-const Product=mongoose.model("Product",ProductSchema);
+const Product=mongoose.model("Product",ProductSchema);  
 
 export default Product

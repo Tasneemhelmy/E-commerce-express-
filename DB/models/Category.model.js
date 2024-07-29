@@ -29,10 +29,24 @@ const categorySchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
-categorySchema.post('init',(doc)=>{
-    if(doc?.image)
-        doc.image='http://localhost:3000/uploads/category/'+doc?.image
-})
+categorySchema.post('find', function(docs) {
+    if (Array.isArray(docs)) {
+        docs.forEach(doc => {
+            if (doc.image) {
+                doc.image = 'http://localhost:3000/uploads/category/' + doc.image;
+            }
+
+            
+        });
+    } else {
+        if (docs.image) {
+            docs.image = 'http://localhost:3000/uploads/category/' + docs.image;
+        }
+
+        
+    }
+});
+
 const Category=mongoose.model("Category",categorySchema);
 
 export default Category

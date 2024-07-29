@@ -42,6 +42,7 @@ export const updateCategory=asyncHandler(async(req,res,next)=>{
             deleteImage('category',category.image)
     await Category.findByIdAndUpdate(req.params.id,{name,slug,image:req.file?.filename},{new:true});
     
+    category.save()
         return res.status(200).json({ message: 'Updated', category });
         
 })

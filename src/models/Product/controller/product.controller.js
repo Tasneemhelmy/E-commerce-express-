@@ -61,14 +61,12 @@ export const updateProduct=asyncHandler(async(req,res,next)=>{
     if(!product)
         return next(new AppError("Not Found product",404))
     if(req.files?.mainImage?.length ){
-        console.log('1')
         req.body.mainImage=req.files?.mainImage[0].filename
         if(product.mainImage)
             deleteImage('product',product.mainImage)
     }
         
     if(req.files?.coverImage?.length){
-        console.log('2')
         req.body.coverImage=req.files?.coverImage?.map(element=>element.filename)
         if(product.coverImage){
             product.coverImage.forEach(image=>deleteImage('product',image))

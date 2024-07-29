@@ -41,7 +41,7 @@ export const updateBrand=asyncHandler(async(req,res,next)=>{
         if(brand.image && req.file) 
             deleteImage('brand',brand.image)
     await Brand.findByIdAndUpdate(req.params.id,{name,slug,image:req.file?.filename},{new:true});
-    
+    brand.save()
     if(!brand) 
         return next(new AppError("Not Found brand",404))
         return res.status(200).json({message:"Updated",brand})
