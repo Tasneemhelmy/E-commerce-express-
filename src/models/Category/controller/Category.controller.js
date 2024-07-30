@@ -35,16 +35,20 @@ export const getCategory=asyncHandler(async(req,res,next)=>{
 
 export const updateCategory=asyncHandler(async(req,res,next)=>{
     const{name}=req.body
-    const slug=slugify(name)
-    const category=await Category.findById(req.params.id)
-    if(!category) return next(new AppError("Not Found category",404))
-        if(category.image && req.file) 
+    const category =await Category.findById(req.params.id)
+    if(!category) return next(new AppError("Not Found brand",404))
+        if(req.file) {
             deleteImage('category',category.image)
-    await Category.findByIdAndUpdate(req.params.id,{name,slug,image:req.file?.filename},{new:true});
-    
-    category.save()
-        return res.status(200).json({ message: 'Updated', category });
+            category.image=req.file.filename
+        }
+
+        category.name=name|| category.name
+        if (name) {
+            category.slug = slugify(name);
+        }
+        await category.save()
         
+        return res.status(200).json({message:"Updated",category})
 })
 
 export const deleteCategory=asyncHandler(async(req,res,next)=>{

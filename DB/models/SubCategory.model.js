@@ -33,10 +33,23 @@ const subcategorySchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 })
-subcategorySchema.post('init',(doc)=>{
-    if(doc.image)
-        doc.image='http://localhost:3000/uploads/subcategory/'+doc.image
-})
+subcategorySchema.post('find', function(docs) {
+    if (Array.isArray(docs)) {
+        docs.forEach(doc => {
+            if (doc.image) {
+                doc.image = 'http://localhost:3000/uploads/subcategory/' + doc.image;
+            }
+
+            
+        });
+    } else {
+        if (docs.image) {
+            docs.image = 'http://localhost:3000/uploads/subcategory/' + docs.image;
+        }
+
+        
+    }
+});
 
 const Subcategory=mongoose.model("Subcategory",subcategorySchema);
 

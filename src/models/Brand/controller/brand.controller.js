@@ -35,15 +35,19 @@ export const getBrand=asyncHandler(async(req,res,next)=>{
 
 export const updateBrand=asyncHandler(async(req,res,next)=>{
     const{name}=req.body
-    const slug=slugify(name)
     const brand =await Brand.findById(req.params.id)
     if(!brand) return next(new AppError("Not Found brand",404))
-        if(brand.image && req.file) 
+        if(req.file) {
             deleteImage('brand',brand.image)
-    await Brand.findByIdAndUpdate(req.params.id,{name,slug,image:req.file?.filename},{new:true});
-    brand.save()
-    if(!brand) 
-        return next(new AppError("Not Found brand",404))
+            brand.image=req.file.filename
+        }
+
+        brand.name=name|| brand.name
+        if (name) {
+            brand.slug = slugify(name);
+        }
+        await brand.save()
+        
         return res.status(200).json({message:"Updated",brand})
 })
 

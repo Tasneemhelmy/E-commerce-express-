@@ -46,7 +46,6 @@ categorySchema.post('find', function(docs) {
         
     }
 });
-
 const Category=mongoose.model("Category",categorySchema);
 
 export default Category
