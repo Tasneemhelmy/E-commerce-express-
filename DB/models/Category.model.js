@@ -12,8 +12,8 @@ const categorySchema=new mongoose.Schema({
     image: String,
     createdBy: {
         type: Types.ObjectId,
-        // require:[true,"createdBy is required"],
-        // ref: "User",
+        require:[true,"createdBy is required"],
+        ref: "User",
     },
     updatedBy: {
         type: Types.ObjectId,

@@ -5,6 +5,8 @@ import categoryRouter from './models/Category/Category.route.js'
 import brandRouter from './models/Brand/brand.route.js'
 import subcategoryRouter from './models/SubCategory/subCategory.route.js'
 import productRouter from './models/Product/product.route.js'
+import userRouter from './models/User/user.route.js'
+import authRoute from './models/auth/auth.route.js'
 import dotenv from 'dotenv'
 const bootstrap=(app,express)=>{
     process.on('uncaughtException',(err)=>{
@@ -20,6 +22,8 @@ app.use(`${baseUrl}/Category`,categoryRouter)
 app.use(`${baseUrl}/Brand`,brandRouter)
 app.use(`${baseUrl}/SubCategory`,subcategoryRouter)
 app.use(`${baseUrl}/Product`,productRouter)
+app.use(`${baseUrl}/User`,userRouter)
+app.use(`${baseUrl}/Auth`,authRoute)
 app.use('*',(req,res)=>{
     res.status(404).json({message:'Not Found'})
 })

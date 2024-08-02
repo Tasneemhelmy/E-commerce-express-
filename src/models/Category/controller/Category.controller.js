@@ -11,7 +11,7 @@ import ApiFeatures from "../../../utils/apiFeatures.js";
 export const getCategories=asyncHandler(async(req,res,next)=>{
     
     let apiFeature=new ApiFeatures(Category.find(),req.query)
-    apiFeature=apiFeature.pagination().sort().fields().search('name','slug')
+    apiFeature=apiFeature.pagination().sort().fields().search('name','slug').filter()
     const categories= await apiFeature.mongooseQuery
     if(!categories.length)
         return next(new AppError("Not Found categories",404))
@@ -21,8 +21,9 @@ export const getCategories=asyncHandler(async(req,res,next)=>{
 export const addCatogery=asyncHandler(async(req,res,next)=>{
     req.body.image=req.file?.filename
     const {name,image}=req.body
+
     const slug=slugify(name)
-    const category=await Category.create({name,slug,image});
+    const category=await Category.create({name,slug,image,createdBy:req.user._id});
     res.status(200).json({message:"created",category})
 })
 
@@ -43,6 +44,7 @@ export const updateCategory=asyncHandler(async(req,res,next)=>{
         }
 
         category.name=name|| category.name
+        category.updatedBy=req.user._id
         if (name) {
             category.slug = slugify(name);
         }
@@ -53,7 +55,7 @@ export const updateCategory=asyncHandler(async(req,res,next)=>{
 
 export const deleteCategory=asyncHandler(async(req,res,next)=>{
     
-    const category=await Category.findByIdAndDelete(req.params.id);
+    const category=await Category.findOneAndDelete({createdBy:req.user._id});
     
     if(!category) return next(new AppError("Not Found category",404))
         if(category.image)

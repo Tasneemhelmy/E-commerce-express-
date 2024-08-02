@@ -10,7 +10,7 @@ import deleteImage from '../../../utils/deleteImage.js'
 
 export const getBrands=asyncHandler(async(req,res,next)=>{
     let apiFeature=new ApiFeatures(Brand.find(),req.query)
-    apiFeature=apiFeature.pagination().sort().fields().search('name','slug')
+    apiFeature=apiFeature.pagination().sort().fields().search('name','slug').filter()
     const brands= await apiFeature.mongooseQuery
     
     if(!brands.length)
@@ -22,6 +22,7 @@ export const addBrand=asyncHandler(async(req,res,next)=>{
     const {name}=req.body
     req.body.slug=slugify(name)
     req.body.image=req.file?.filename
+    req.body.createdBy=req.user._id
     const brand=await Brand.create(req.body);
     res.status(200).json({message:"created",brand})
 })
@@ -43,6 +44,7 @@ export const updateBrand=asyncHandler(async(req,res,next)=>{
         }
 
         brand.name=name|| brand.name
+        brand.updatedBy=req.user._id
         if (name) {
             brand.slug = slugify(name);
         }
@@ -53,7 +55,7 @@ export const updateBrand=asyncHandler(async(req,res,next)=>{
 
 export const deleteBrand=asyncHandler(async(req,res,next)=>{
 
-    const brand=await Brand.findByIdAndDelete(req.params.id);
+    const brand=await Brand.findOneAndDelete({createdBy:req.user._id});
     
     if(!brand) 
         return next(new AppError("Not Found brand",404))

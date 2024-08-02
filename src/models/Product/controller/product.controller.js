@@ -21,7 +21,7 @@ export const getProducts=asyncHandler(async(req,res,next)=>{
     // ]);
     
 let ApiFeature= new ApiFeatures(Product.find(),req.query)
-ApiFeature=ApiFeature.pagination().sort().fields().search('title','description')
+ApiFeature=ApiFeature.pagination().sort().fields().search('title','description').filter()
 const products=await ApiFeature.mongooseQuery
     if(!products.length)
         return next(new AppError("Not Found products",404))

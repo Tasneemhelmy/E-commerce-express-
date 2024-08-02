@@ -12,12 +12,12 @@ const brandSchema=new mongoose.Schema({
     image: String,
     createdBy: {
         type: Types.ObjectId,
-        // require:[true,"createdBy is required"],
-        // ref: "User",
+        require:[true,"createdBy is required"],
+        ref: "User",
     },
     updatedBy: {
         type: Types.ObjectId,
-        // ref: "User",
+        ref: "User",
     },
     slug:{
         type:String,

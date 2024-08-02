@@ -1,3 +1,5 @@
+import { stringify } from "uuid"
+
 class ApiFeatures{
     constructor(mongooseQuery,data){
         this.mongooseQuery=mongooseQuery
@@ -35,7 +37,7 @@ class ApiFeatures{
         return this
     }
     search(field1,field2){
-        if(this.data.search){
+        if(this.data?.search){
             this.mongooseQuery.find({
                 $or:[
                     {[field1]:{$regex:this.data.search}},
@@ -45,6 +47,18 @@ class ApiFeatures{
             return this
         }
         
+    return this
+}
+filter(){
+    let query={...this.data}
+    let arr= ["page","limit","sort","fields","search"]
+    arr.forEach(element => {
+        delete query[element]  
+    });
+    query=JSON.stringify(query)
+    query=query.replace(/gt|gte|lt|lte|eq/,(value)=>`$${value}`)
+    query=JSON.parse(query)
+    this.mongooseQuery.find(query)
     return this
 }
 }
