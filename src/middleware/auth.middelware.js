@@ -26,6 +26,17 @@ export const authorization=(roles)=>{
     return asyncHandler(async(req,res,next)=>{
         if(!roles.includes(req.user.role))
             return next(new AppError("Unauthorized",401))
+
         next()
     })
+}
+
+export const authForAdmin=(role)=>{
+    return asyncHandler(async(req,res,next)=>{
+        if(role!=='admin')
+            return next(new AppError("Unauthorized ",401))
+        next()
+    })
+
+
 }
