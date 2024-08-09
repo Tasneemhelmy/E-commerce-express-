@@ -30,13 +30,3 @@ export const authorization=(roles)=>{
         next()
     })
 }
-
-export const authForAdmin=(role)=>{
-    return asyncHandler(async(req,res,next)=>{
-        if(role!=='admin')
-            return next(new AppError("Unauthorized ",401))
-        next()
-    })
-
-
-}

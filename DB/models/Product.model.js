@@ -74,7 +74,8 @@ const ProductSchema=new mongoose.Schema({
     }
 },{
     timestamps:true,
-    versionKey:false
+    versionKey:false,
+    toJSON:{virtuals:true}
 })
 ProductSchema.post('find', function(docs) {
     if (Array.isArray(docs)) {
@@ -98,6 +99,14 @@ ProductSchema.post('find', function(docs) {
     }
 });
 
+ProductSchema.virtual('review',{
+    ref:'Review',
+    localField:'_id',
+    foreignField:'product'
+})
+ProductSchema.pre(/find/,function(){
+    this.populate('review')
+})
 const Product=mongoose.model("Product",ProductSchema);  
 
 export default Product

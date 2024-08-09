@@ -38,8 +38,11 @@ const userSchema=new mongoose.Schema({
     },
     resetToken:{
         type:Date
-    }
-
+    },
+    wishlist:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Product"
+    }]
 },{
     timestamps:true,
     versionKey:false
