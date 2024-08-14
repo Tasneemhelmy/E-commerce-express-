@@ -5,8 +5,9 @@ import roles from "../../types/roles.js";
 const router=Router()
 
 router.post('/',authentication,authorization([roles.USER]),cartController.addCart)
-    .get('/',authentication,authorization([roles.USER]),cartController.getWishlist)
-    .delete('/',authentication,authorization([roles.USER]),cartController.deleteWishlist)
+    .post('/applyCoupon',authentication,authorization([roles.USER]),cartController.applyCopoune)
+    .get('/',authentication,authorization([roles.USER]),cartController.getCart)
+    .delete('/',authentication,authorization([roles.USER]),cartController.deleteCart)
 
 
 

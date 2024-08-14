@@ -30,7 +30,9 @@ const cartSchema=new mongoose.Schema({
     ],
     subTotal:{
         type:Number,
-        min:0
+        min:0,
+        default:0
+
     },
     discount:{
         type:Number,
@@ -38,7 +40,8 @@ const cartSchema=new mongoose.Schema({
     },
     total:{
         type:Number,
-    
+        min:0,
+        default:0
     }
 })
 
