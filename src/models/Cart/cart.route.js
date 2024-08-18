@@ -8,6 +8,8 @@ router.post('/',authentication,authorization([roles.USER]),cartController.addCar
     .post('/applyCoupon',authentication,authorization([roles.USER]),cartController.applyCopoune)
     .get('/',authentication,authorization([roles.USER]),cartController.getCart)
     .delete('/',authentication,authorization([roles.USER]),cartController.deleteCart)
+    .post('/:id',authentication,authorization([roles.USER]),cartController.deleteProduct)
+    .patch('/:id',authentication,authorization([roles.USER]),cartController.updateQuantity)
 
 
 

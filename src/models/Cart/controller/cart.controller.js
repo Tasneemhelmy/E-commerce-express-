@@ -51,24 +51,25 @@ export const addCart=asyncHandler(async(req,res,next)=>{
     let found=false
     cartt.products.forEach(async(el)=>{
         if(el.product==req.body.product){
-            console.log(el)
             found=true
             if(product.stock< el.quantity+req.body.quantity)
                 return next(new AppError("Out Of Stock",400))
             el.quantity=req.body.quantity+el.quantity
-            await cartt.save()
-            calc(cartt)
-            return res.status(201).json({message:"done",cartt})
-            
+        
         }
     })
+    if(found){
+        await cartt.save()
+        calc(cartt)
+        return res.status(201).json({message:"done",cartt})
+    }
     if(found==false)
         if(product.stock<req.body.quantity)
             return next(new AppError("Out Of Stock",400))
         cartt.products.push({product:req.body.product,quantity:req.body.quantity,price:product.priceAfterDiscount})
     await cartt.save()
     calc(cartt)
-    res.status(201).json({message:"done",cartt})
+    res.status(201).json({message:"Cart Adeded",cartt})
 
 }
 })
@@ -83,7 +84,7 @@ export const applyCopoune=asyncHandler(async(req,res,next)=>{
     cart.discount=copoune.discount
     await cart.save()
     calc(cart)
-    res.status(201).json({message:"done",cart})
+    res.status(201).json({message:"Hurray! You got a discount!",cart})
 
 })
 
@@ -94,4 +95,39 @@ export const deleteCart=asyncHandler(async(req,res,next)=>{
         return next(new AppError("Cart not found",404))
     res.status(200).json({message:"deleted",cart})
     
+})
+
+export const deleteProduct=asyncHandler(async(req,res,next)=>{
+    const cart=await Cart.findOneAndUpdate({user:req.user._id},{
+        $pull:{products:{_id:req.params.id}},
+    },{new:true})
+    if(!cart)
+        return next(new AppError("cart not found",404))
+    calc(cart)
+    res.status(200).json({message:"The item has been removed",cart})
+})
+
+export const updateQuantity=asyncHandler(async(req,res,next)=>{
+    const cartt=await Cart.findOne({user:req.user._id})
+    if(!cartt){
+        const newCart=await Cart.create({user:req.user._id})
+    }
+    let found=false
+    cartt.products.forEach(async(el)=>{
+        if(el.product==req.params.id){
+            found=true
+            el.quantity=req.body.quantity
+        }
+    })
+    const product=await Product.findOne({_id:req.params.id})
+            if(!product)
+                return next(new AppError("product not found ",404))
+            if(product.stock<req.body.quantity )
+                return next(new AppError("Out Of Stock",400))
+    if(found){
+        await cartt.save()
+        calc(cartt)
+        return res.status(201).json({message:"Quantity Updated",cartt})
+    }
+        return next(new AppError("product not found in the cart",404))
 })

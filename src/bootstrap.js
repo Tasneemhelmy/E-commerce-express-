@@ -10,6 +10,8 @@ import couponRouter from './models/Coupon/Coupon.route.js'
 import reviewRouter from './models/Review/review.route.js'
 import wishlistRouter from './models/WishList/Wishlist.route.js'
 import cartRouter from './models/Cart/cart.route.js'
+import orderCart from './models/Order/order.route.js'
+import adressRouter from './models/Adress/Adress.route.js'
 import dotenv from 'dotenv'
 const bootstrap=(app,express)=>{
     process.on('uncaughtException',(err)=>{
@@ -30,7 +32,9 @@ app.use(`${baseUrl}/Auth`,authRoute)
 app.use(`${baseUrl}/Coupon`,couponRouter)
 app.use(`${baseUrl}/Review`,reviewRouter)
 app.use(`${baseUrl}/Wishlist`,wishlistRouter)
+app.use(`${baseUrl}/Adress`,adressRouter)
 app.use(`${baseUrl}/Cart`,cartRouter)
+app.use(`${baseUrl}/Order`,orderCart)
 app.use('*',(req,res)=>{
     res.status(404).json({message:'Not Found'})
 })
