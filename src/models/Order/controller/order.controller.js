@@ -3,8 +3,10 @@ import Cart from "../../../../DB/models/Cart.model.js";
 import Product from "../../../../DB/models/Product.model.js";
 import Order from "../../../../DB/models/Order.model.js";
 import AppError from "../../../utils/Error.js";
+import Stripe from "stripe";
 
 
+const stripe =new Stripe('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 export const addCashOrder=asyncHandler(async(req,res,next)=>{
     const cart=await Cart.findOne({user:req.user._id})
@@ -34,6 +36,41 @@ export const addCashOrder=asyncHandler(async(req,res,next)=>{
     req.body.user=req.user._id
     const order=await Order.create(req.body)
     await Cart.findOneAndDelete({user:req.user._id})
+
+if(req.body.paymentMethod=='card'){
+
+const YOUR_DOMAIN = 'http://localhost:4242';
+
+
+    const session = await stripe.checkout.sessions.create({
+    line_items: [
+        {
+        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        price_data:{
+            currency: 'egp',
+            unit_amount: order.total*100,
+            product_data:{
+                name:"tast",
+                description:"dec",
+
+            }
+
+            
+        },
+        quantity: 1,
+        },
+    ],
+    mode: 'payment',
+    success_url: `${YOUR_DOMAIN}?success=true`,
+    cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+    client_reference_id:req.user._id,
+
+});
+
+return res.status(200).json({session})
+
+}
+
     res.status(201).json({message:"created",order})
 
 
