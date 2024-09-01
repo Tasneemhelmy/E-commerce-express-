@@ -3,10 +3,7 @@ import Cart from "../../../../DB/models/Cart.model.js";
 import Product from "../../../../DB/models/Product.model.js";
 import Order from "../../../../DB/models/Order.model.js";
 import AppError from "../../../utils/Error.js";
-import Stripe from "stripe";
 
-
-const stripe =new Stripe('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 export const addCashOrder=asyncHandler(async(req,res,next)=>{
     const cart=await Cart.findOne({user:req.user._id})

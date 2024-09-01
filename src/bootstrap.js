@@ -13,6 +13,11 @@ import cartRouter from './models/Cart/cart.route.js'
 import orderCart from './models/Order/order.route.js'
 import adressRouter from './models/Adress/Adress.route.js'
 import dotenv from 'dotenv'
+import asyncHandler from './middleware/asyncHandlers.js'
+import Stripe from "stripe";
+
+
+const stripe =new Stripe('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 const bootstrap=(app,express)=>{
     process.on('uncaughtException',(err)=>{
         console.log(err)
@@ -22,6 +27,25 @@ const bootstrap=(app,express)=>{
     connected()
     
     app.use('/uploads',express.static('uploads'))
+
+    const endpointSecret = "whsec_dx9N21rznrH6w5iHHmW0wNgRyIsCECEP";
+
+    app.post(
+    "/webhook",
+    express.raw({ type: "application/json" }),
+    asyncHandler((req, res) => {
+        const sig = req.headers["stripe-signature"].toString();
+        let event;
+        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+        let checkoutSessionCompleted;
+      // Handle the event
+        if (event.type == "checkout.session.completed")
+        checkoutSessionCompleted = event.data.object;
+        else console.log(`Unhandled event type ${event.type}`);
+
+        res.status(200).json({ checkoutSessionCompleted });
+    })
+);
 app.use(express.json())
 app.use(`${baseUrl}/Category`,categoryRouter)
 app.use(`${baseUrl}/Brand`,brandRouter)
