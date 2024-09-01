@@ -8,18 +8,18 @@ export const customVaildation={
 }
 
 export const uploads=(customVaildation,folderName)=>{
-    if(!fs.existsSync(`./uploads/${folderName}`)){
-        fs.mkdirSync(`./uploads/${folderName}`)
-    }
-    const storage=multer.diskStorage({
-        destination:function (req,file,cb){
-            cb(null,`uploads/${folderName}`)
-        },
-        filename:function (req,file,cb){
-           // console.log(file)
-            cb(null,uuidv4()+'_'+ file.originalname)
-        }
-    })
+    // if(!fs.existsSync(`./uploads/${folderName}`)){
+    //     fs.mkdirSync(`./uploads/${folderName}`)
+    // }
+    // const storage=multer.diskStorage({
+    //     destination:function (req,file,cb){
+    //         cb(null,`uploads/${folderName}`)
+    //     },
+    //     filename:function (req,file,cb){
+    //        // console.log(file)
+    //         cb(null,uuidv4()+'_'+ file.originalname)
+    //     }
+    // })
     const fileFilter=(req,file,cb)=>{
         if(customVaildation.includes(file.mimetype)){
         cb(null,true)
@@ -28,7 +28,7 @@ export const uploads=(customVaildation,folderName)=>{
     
     
     }
-    const upload=multer({storage,fileFilter})
+    const upload=multer({fileFilter})
 
     return upload
 }

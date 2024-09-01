@@ -55,7 +55,7 @@ export const updateCategory=asyncHandler(async(req,res,next)=>{
 
 export const deleteCategory=asyncHandler(async(req,res,next)=>{
     
-    const category=await Category.findOneAndDelete({createdBy:req.user._id});
+    const category=await Category.findOneAndDelete({createdBy:req.user._id,_id:req.params.id});
     
     if(!category) return next(new AppError("Not Found category",404))
         if(category.image)

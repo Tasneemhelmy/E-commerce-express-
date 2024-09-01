@@ -14,6 +14,6 @@ router.get('/',authentication,authorization([roles.ADMIN,roles.USER]),categoryCo
     .post('/',authentication,authorization([roles.ADMIN]),uploads(customVaildation.image,'category').single('image'),vaildateSchema(addCategorySchema),categoryController.addCatogery)
     .get('/:id',authentication,authorization([roles.ADMIN,roles.USER]),categoryController.getCategory)
     .put('/:id',authentication,authorization([roles.ADMIN]),uploads(customVaildation.image,'category').single('image'),categoryController.updateCategory)
-    .delete('/',authentication,authorization([roles.ADMIN]),categoryController.deleteCategory)
+    .delete('/:id',authentication,authorization([roles.ADMIN]),categoryController.deleteCategory)
     .use('/:id/SubCategory',authentication,authorization([roles.ADMIN,roles.USER]),SubCategoryRouter)
 export default router
